@@ -96,67 +96,46 @@ function AutoDrive.readFromXML(xmlFile)
                                                                  AutoDrive.experimentalFeatures[feature])
     end
 
-    local mapMarker = {}
-    local mapMarkerCounter = 1
-    mapMarker.name = getXMLString(xmlFile, "AutoDrive." .. AutoDrive.loadedMap .. ".mapmarker.mm" .. mapMarkerCounter .. ".name")
-    if mapMarker.name == nil or mapMarker.name == "" then
-        mapMarker.name = getXMLString(xmlFile, "AutoDrive.mapmarker.mm" .. mapMarkerCounter .. ".name")
-    end
-
-    mapMarker.group = getXMLString(xmlFile, "AutoDrive." .. AutoDrive.loadedMap .. ".mapmarker.mm" .. mapMarkerCounter .. ".group")
-    if mapMarker.group == nil or mapMarker.group == "" then
-        mapMarker.group = getXMLString(xmlFile, "AutoDrive.mapmarker.mm" .. mapMarkerCounter .. ".group")
-    end
-
-    mapMarker.markerIndex = mapMarkerCounter
-    if mapMarker.group == nil then
-        mapMarker.group = "All"
-    end
-    if ADGraphManager:getGroupByName(mapMarker.group) == nil then
-        ADGraphManager:addGroup(mapMarker.group)
-    end
-
     ADGraphManager:resetMapMarkers()
 
-    while mapMarker.name ~= nil do
-        mapMarker.id = getXMLFloat(xmlFile, "AutoDrive." .. AutoDrive.loadedMap .. ".mapmarker.mm" .. mapMarkerCounter .. ".id")
-        if mapMarker.id == nil or mapMarker.id == "" then
-            mapMarker.id = getXMLFloat(xmlFile, "AutoDrive.mapmarker.mm" .. mapMarkerCounter .. ".id")
+    local mapMarker = {}
+    local mapMarkerCounter = 1
+
+    while mapMarker ~= nil do
+        local path = "AutoDrive.mapmarker.mm" .. tostring(mapMarkerCounter)
+
+        if not hasXMLProperty(xmlFile, path) then
+            mapMarker = nil
+            break
         end
 
+        mapMarker.id = getXMLFloat(xmlFile, path .. ".id")
+        mapMarker.name = getXMLString(xmlFile, path .. ".name")
+        mapMarker.group = getXMLString(xmlFile, path .. ".group") or "All"
         mapMarker.markerIndex = mapMarkerCounter
+        mapMarker.restriction_mode = getXMLString(xmlFile, path .. ".restriction#mode") or "whitelist"
+        g_logManager:info("[ADAH] Loaded restriction for map marker " .. mapMarker.name .. " with mode: " .. tostring(mapMarker.restriction_mode))
+        mapMarker.restrictions = {}
+        local vname = ""
+        while vname ~= nil do
+            local id = #mapMarker.restrictions + 1
+            vname = getXMLString(xmlFile, path .. ".restriction.vehicle-" .. id)
+            if vname ~= nil then
+                mapMarker.restrictions[id] = vname
+                g_logManager:info("[ADAH] Added restriction for map marker " .. mapMarker.name .. ": " .. vname)
+            end
+        end
 
         ADGraphManager:setMapMarker(mapMarker)
-
-        mapMarker = nil
-        mapMarker = {}
-        mapMarkerCounter = mapMarkerCounter + 1
-        mapMarker.name = getXMLString(xmlFile, "AutoDrive." .. AutoDrive.loadedMap .. ".mapmarker.mm" .. mapMarkerCounter .. ".name")
-        if mapMarker.name == nil or mapMarker.name == "" then
-            mapMarker.name = getXMLString(xmlFile, "AutoDrive.mapmarker.mm" .. mapMarkerCounter .. ".name")
-        end
-
-        mapMarker.group = getXMLString(xmlFile, "AutoDrive." .. AutoDrive.loadedMap .. ".mapmarker.mm" .. mapMarkerCounter .. ".group")
-        if mapMarker.group == nil or mapMarker.group == "" then
-            mapMarker.group = getXMLString(xmlFile, "AutoDrive.mapmarker.mm" .. mapMarkerCounter .. ".group")
-        end
-
-        if mapMarker.group == nil then
-            mapMarker.group = "All"
-        end
-
-        mapMarker.restriction = getXMLBool(xmlFile, "AutoDrive.mapmarker.mm" .. mapMarkerCounter .. ".restriction")
-        if mapMarker.restriction == nil then
-            mapMarker.restriction = false
-        end
-        if mapMarker.restriction == true then
-            g_logManager:info("[ADAH] Loaded restriction for map marker " .. mapMarker.name .. " VALUE=TRUE")
-        end
 
         if ADGraphManager:getGroupByName(mapMarker.group) == nil then
             ADGraphManager:addGroup(mapMarker.group)
         end
+
+        mapMarkerCounter = mapMarkerCounter + 1
+        mapMarker = {}
     end
+    -- done loading map markers and restrictionsrestrictions
 
     local idString = getXMLString(xmlFile, "AutoDrive." .. AutoDrive.loadedMap .. ".waypoints.id")
     if idString == nil or idString == "" then
@@ -357,7 +336,7 @@ function AutoDrive.saveToXML(xmlFile)
             setXMLFloat(xmlFile, path .. ".id", marker.id)
             setXMLString(xmlFile, path .. ".name", marker.name)
             setXMLString(xmlFile, path .. ".group", marker.group)
-            setXMLBool(xmlFile, path .. ".restriction", (marker.restriction or false))
+            -- setXMLBool(xmlFile, path .. ".restriction", (marker.restriction or false))
             markerIndex = markerIndex + 1
         end
     end
