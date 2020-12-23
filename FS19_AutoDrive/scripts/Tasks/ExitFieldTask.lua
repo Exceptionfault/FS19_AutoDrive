@@ -67,7 +67,7 @@ function ExitFieldTask:startPathPlanning()
     if self.nextExitStrategy == ExitFieldTask.STRATEGY_CLOSEST then
         local closest = self.vehicle:getClosestWayPoint()
         local closestNode = ADGraphManager:getWayPointById(closest)
-        local wayPoints = ADGraphManager:pathFromTo(closest, self.vehicle.ad.stateModule:getSecondWayPoint())
+        local wayPoints = ADGraphManager:pathFromTo(closest, self.vehicle.ad.stateModule:getSecondWayPoint(), self.vehicle)
         if wayPoints ~= nil and #wayPoints > 1 then
             local vecToNextPoint = {x = wayPoints[2].x - closestNode.x, z = wayPoints[2].z - closestNode.z}
             self.vehicle.ad.pathFinderModule:startPathPlanningTo(closestNode, vecToNextPoint)
@@ -78,7 +78,7 @@ function ExitFieldTask:startPathPlanning()
         end
     else
         local targetNode = ADGraphManager:getWayPointById(self.vehicle.ad.stateModule:getFirstWayPoint())
-        local wayPoints = ADGraphManager:pathFromTo(self.vehicle.ad.stateModule:getFirstWayPoint(), self.vehicle.ad.stateModule:getSecondWayPoint())
+        local wayPoints = ADGraphManager:pathFromTo(self.vehicle.ad.stateModule:getFirstWayPoint(), self.vehicle.ad.stateModule:getSecondWayPoint(), self.vehicle)
         if wayPoints ~= nil and #wayPoints > 1 then
             local vecToNextPoint = {x = wayPoints[2].x - targetNode.x, z = wayPoints[2].z - targetNode.z}
             if AutoDrive.getSetting("exitField", self.vehicle) == 1 and #wayPoints > 6 then

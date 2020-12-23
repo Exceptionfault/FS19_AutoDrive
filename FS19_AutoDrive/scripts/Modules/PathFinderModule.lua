@@ -62,7 +62,7 @@ end
 
 function PathFinderModule:startPathPlanningToWayPoint(wayPointId, destinationId)
     local targetNode = ADGraphManager:getWayPointById(wayPointId)
-    local wayPoints = ADGraphManager:pathFromTo(wayPointId, destinationId)
+    local wayPoints = ADGraphManager:pathFromTo(wayPointId, destinationId, self.vehicle)
     if wayPoints ~= nil and #wayPoints > 1 then
         local vecToNextPoint = {x = wayPoints[2].x - targetNode.x, z = wayPoints[2].z - targetNode.z}
         self:startPathPlanningTo(targetNode, vecToNextPoint)
@@ -243,7 +243,7 @@ end
 function PathFinderModule:restartAtNextWayPoint()
     self.targetWayPointId = self.appendWayPoints[2].id
     local targetNode = ADGraphManager:getWayPointById(self.targetWayPointId)
-    local wayPoints = ADGraphManager:pathFromTo(self.targetWayPointId, self.destinationId)
+    local wayPoints = ADGraphManager:pathFromTo(self.targetWayPointId, self.destinationId, self.vehicle)
     if wayPoints ~= nil and #wayPoints > 1 then
         local vecToNextPoint = {x = wayPoints[2].x - targetNode.x, z = wayPoints[2].z - targetNode.z}
         local storedRetryCounter = self.retryCounter
@@ -255,7 +255,7 @@ function PathFinderModule:restartAtNextWayPoint()
         self.fallBackMode = true
         self.targetWayPointId = storedTargetWayPointId
         if self.targetWayPointId ~= nil then
-            self.appendWayPoints = ADGraphManager:pathFromTo(self.targetWayPointId, self.destinationId)
+            self.appendWayPoints = ADGraphManager:pathFromTo(self.targetWayPointId, self.destinationId, self.vehicle)
         end
     end
     self:autoRestart()

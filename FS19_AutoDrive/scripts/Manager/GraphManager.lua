@@ -122,26 +122,26 @@ function ADGraphManager:getPathTo(vehicle, waypointId)
 	local wp = {}
 	local closestWaypoint = self:findMatchingWayPointForVehicle(vehicle)
 	if closestWaypoint ~= nil then
-		wp = self:pathFromTo(closestWaypoint, waypointId)
+		wp = self:pathFromTo(closestWaypoint, waypointId, vehicle)
 	end
 
 	return wp
 end
 
-function ADGraphManager:pathFromTo(startWaypointId, targetWaypointId)
+function ADGraphManager:pathFromTo(startWaypointId, targetWaypointId, vehicle)
 	local wp = {}
 	if startWaypointId ~= nil and self.wayPoints[startWaypointId] ~= nil and targetWaypointId ~= nil and self.wayPoints[targetWaypointId] ~= nil then
 		if startWaypointId == targetWaypointId then
 			table.insert(wp, self.wayPoints[targetWaypointId])
 		else
 			-- wp = ADPathCalculator:GetPath(startWaypointId, targetWaypointId)
-			wp = AutoDrive:dijkstraLiveShortestPath(startWaypointId, targetWaypointId)
+			wp = AutoDrive:dijkstraLiveShortestPath(startWaypointId, targetWaypointId, vehicle)
 		end
 	end
 	return wp
 end
 
-function ADGraphManager:pathFromToMarker(startWaypointId, markerId)
+function ADGraphManager:pathFromToMarker(startWaypointId, markerId, vehicle)
 	local wp = {}
 	if startWaypointId ~= nil and self.wayPoints[startWaypointId] ~= nil and self.mapMarkers[markerId] ~= nil and self.mapMarkers[markerId].id ~= nil then
 		local targetId = self.mapMarkers[markerId].id
@@ -150,7 +150,7 @@ function ADGraphManager:pathFromToMarker(startWaypointId, markerId)
 			return wp
 		else
 			-- wp = ADPathCalculator:GetPath(startWaypointId, targetId)
-			wp = AutoDrive:dijkstraLiveShortestPath(startWaypointId, targetId)
+			wp = AutoDrive:dijkstraLiveShortestPath(startWaypointId, targetId, vehicle)
 		end
 	end
 	return wp
@@ -182,7 +182,8 @@ function ADGraphManager:FastShortestPath(start, markerName, markerId)
 	end
 
 	-- wp = ADPathCalculator:GetPath(start_id, target_id)
-	wp = AutoDrive:dijkstraLiveShortestPath(start_id, target_id)
+	-- TODO: see how to get vehicle here and forward to dijkstra
+	wp = AutoDrive:dijkstraLiveShortestPath(start_id, target_id, nil)
 	return wp
 end
 
