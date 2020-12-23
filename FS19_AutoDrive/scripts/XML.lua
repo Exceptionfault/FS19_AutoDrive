@@ -143,6 +143,15 @@ function AutoDrive.readFromXML(xmlFile)
 		if mapMarker.group == nil then
 			mapMarker.group = "All"
 		end
+
+		mapMarker.restriction = getXMLBool(xmlFile, "AutoDrive.mapmarker.mm" .. mapMarkerCounter .. ".restriction")
+		if mapMarker.restriction == nil then
+			mapMarker.restriction = false
+		end
+		if mapMarker.restriction == true then
+			g_logManager:info("[ADAH] Loaded restriction for map marker " .. mapMarker.name .. " VALUE=TRUE")
+		end
+
 		if ADGraphManager:getGroupByName(mapMarker.group) == nil then
 			ADGraphManager:addGroup(mapMarker.group)
 		end

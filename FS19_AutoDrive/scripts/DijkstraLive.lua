@@ -50,6 +50,15 @@ function AutoDrive:dijkstraLiveLongLine(current_in, linked_in, target_id)
 				newdist = 100000000
 			end
 
+			-- we should not use wp which are restricted markers
+			local marker = ADGraphManager:getMapMarkerByWayPointId(linked)
+			if marker ~= nil then
+				if marker.restriction == true then
+					newdist = 100000000
+					break --- this is a dead end - stop looping here
+				end
+			end
+
 			AutoDrive.dijkstraCalc.pre[linked] = current
 
 			current = linked
