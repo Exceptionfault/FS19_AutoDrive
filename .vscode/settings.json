@@ -1,0 +1,31 @@
+{
+    "Lua.diagnostics.globals": [
+        "getXMLInt",
+        "getXMLBool",
+        "getXMLString",
+        "getXMLString",
+        "g_logManager",
+        "setXMLString",
+        "setXMLFloat",
+        "setXMLInt",
+        "setXMLBool",
+        "removeXMLProperty",
+        "saveXMLFile",
+        "hasXMLProperty",
+        "Utils",
+        "g_client",
+        "fileExists",
+        "loadXMLFile",
+        "g_server",
+        "createXMLFile",
+        "g_currentMission",
+        "getUserProfileAppPath",
+        "delete",
+        "getXMLFloat",
+        "localToWorld",
+        "getWorldTranslation",
+        "worldToLocal",
+        "MathUtil"
+    ],
+    "vscode-lua-format.configPath": "lua-style.conf"
+}

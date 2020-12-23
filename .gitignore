@@ -35,7 +35,7 @@ AutoDrive Course Editor/out/production/AutoDrive Course Editor/MapPanel.class
 AutoDrive Course Editor/out/production/AutoDrive Course Editor/MouseListener.class
 AutoDrive Course Editor/out/production/AutoDrive Course Editor/RoadMap.class
 modConfig.json
-.vscode
 tmp
 AutoDrive Course Editor/target
 AutoDrive Course Editor/*.log
+build.ps1
