@@ -587,17 +587,20 @@ function AutoDrive:onDrawEditorMode()
                     local nWp = ADGraphManager:getWayPointById(neighbor)
                     if point.incoming == nil or table.contains(point.incoming, neighbor) then
                         --draw dual way line
-                        DrawingManager:addLineTask(x, y, z, nWp.x, nWp.y, nWp.z, 0, 0, 1)
+                        local col = AutoDrive.COLORS.ROUTE_LINE_DUALWAY
+                        DrawingManager:addLineTask(x, y, z, nWp.x, nWp.y, nWp.z, col.r, col.g, col.b)
                     else
                         --draw line with direction markers (arrow)
                         if (nWp.incoming == nil or table.contains(nWp.incoming, point.id)) then
-                            -- one way line
-                            DrawingManager:addLineTask(x, y, z, nWp.x, nWp.y, nWp.z, 0, 1, 0)
-                            DrawingManager:addArrowTask(x, y, z, nWp.x, nWp.y, nWp.z, arrowPosition, 0, 1, 0)
+                            -- one way line - use priority of the wp to colorize the line
+                            local col = AutoDrive:getRoutePriority(nWp.priority).color
+                            DrawingManager:addLineTask(x, y, z, nWp.x, nWp.y, nWp.z, col.r, col.g, col.b)
+                            DrawingManager:addArrowTask(x, y, z, nWp.x, nWp.y, nWp.z, arrowPosition, col.r, col.g, col.b)
                         else
                             -- reverse way line
-                            DrawingManager:addLineTask(x, y, z, nWp.x, nWp.y, nWp.z, 0.0, 0.569, 0.835)
-                            DrawingManager:addArrowTask(x, y, z, nWp.x, nWp.y, nWp.z, arrowPosition, 0.0, 0.569, 0.835)
+                            local col = AutoDrive.COLORS.ROUTE_LINE_REVERSE
+                            DrawingManager:addLineTask(x, y, z, nWp.x, nWp.y, nWp.z, col.r, col.g, col.b)
+                            DrawingManager:addArrowTask(x, y, z, nWp.x, nWp.y, nWp.z, arrowPosition, col.r, col.g, col.b)
                         end
                     end
                 end

@@ -516,11 +516,12 @@ end
 function ADGraphManager:createWayPoint(x, y, z, sendEvent)
 	if sendEvent == nil or sendEvent == true then
 		-- Propagating waypoint creation all over the network
+		-- TODO: add priority to the MP events
 		AutoDriveCreateWayPointEvent.sendEvent(x, y, z)
 	else
 		local prevId = self:getWayPointsCount()
 		local newId = prevId + 1
-		local newWp = self:createNode(newId, x, y, z, {}, {})
+		local newWp = self:createNode(newId, x, y, z, {}, {}, AutoDrive.getSetting('routePriority'))
 		self:setWayPoint(newWp)
 		self:markChanges()
 	end
@@ -563,7 +564,7 @@ function ADGraphManager:recordWayPoint(x, y, z, connectPrevious, dual, isReverse
 	local prevId = self:getWayPointsCount()
 	local newId = prevId + 1
 	local prevWp = self:getWayPointById(prevId)
-	local newWp = self:createNode(newId, x, y, z, {}, {})
+	local newWp = self:createNode(newId, x, y, z, {}, {}, AutoDrive.getSetting('routePriority'))
 	self:setWayPoint(newWp)
 	if connectPrevious then
 		self:toggleConnectionBetween(prevWp, newWp, isReverse, false)
@@ -595,9 +596,7 @@ function ADGraphManager:isReverseRoad(start, target)
 end
 
 function ADGraphManager:getDistanceBetweenNodes(start, target)
-	local euclidianDistance = MathUtil.vector2Length(self.wayPoints[start].x - self.wayPoints[target].x, self.wayPoints[start].z - self.wayPoints[target].z)
-
-	local distance = euclidianDistance
+	local distance = MathUtil.vector2Length(self.wayPoints[start].x - self.wayPoints[target].x, self.wayPoints[start].z - self.wayPoints[target].z)
 
 	if AutoDrive.getSetting("mapMarkerDetour") > 0 then
 		for _, mapMarker in pairs(self.mapMarkers) do
@@ -607,8 +606,15 @@ function ADGraphManager:getDistanceBetweenNodes(start, target)
 			end
 		end
 	end
-
 	return distance
+end
+
+function ADGraphManager:getWeightedDistanceBetweenNodes(start, target)
+	local distance = self:getDistanceBetweenNodes(start, target)
+	-- now add weight based on target priority
+
+	local prio = AutoDrive:getRoutePriority(self:getWayPointById(target).priority or AutoDrive.ROUTE_PRIORITIES.NORMAL.id)
+	return distance * ( prio.weight or 1.0 )
 end
 
 function ADGraphManager:getDriveTimeBetweenNodes(start, target, past, maxDrivingSpeed, arrivalTime)
@@ -785,14 +791,15 @@ function ADGraphManager:getWayPointsInRange(point, rangeMin, rangeMax)
 	return inRange
 end
 
-function ADGraphManager:createNode(id, x, y, z, out, incoming)
+function ADGraphManager:createNode(id, x, y, z, out, incoming, priority)
 	return {
 		id = id,
 		x = x,
 		y = y,
 		z = z,
 		out = out,
-		incoming = incoming
+		incoming = incoming,
+		priority = priority
 	}
 end
 

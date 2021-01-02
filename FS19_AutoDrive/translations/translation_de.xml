@@ -217,6 +217,14 @@
 		<text name="gui_ad_debugChannelRender" 					text="Rendering" />
 		<text name="gui_ad_debugChannelRoadNetwork"				text="Streckennetz" />
 		<text name="gui_ad_debugChannelAll" 					text="Alles" />
+
+		<text name="gui_ad_routePriority"						text="Wege Priorität" />
+		<text name="gui_ad_routePriority_tooltip"				text="Definiert die Priorität einer neuen Strecke" />
+		<text name="gui_ad_routePriority_lowest"				text="Kein Verkehr" />
+		<text name="gui_ad_routePriority_low"					text="Wenig Verkehr" />
+		<text name="gui_ad_routePriority_normal"				text="Normaler Verkehr" />
+		<text name="gui_ad_routePriority_high"					text="Viel Verkehr" />
+		<text name="gui_ad_routePriority_highest"				text="Hauptverkehrsader" />
 		
 		<text name="gui_ad_notificationHistoryTitle" 			text="Notifications" />
 		<text name="button_delete_all" 							text="Delete All" />

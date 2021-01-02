@@ -546,6 +546,29 @@ AutoDrive.settings.pathFinderTime = {
     isVehicleSpecific = false
 }
 
+AutoDrive.settings.routePriority = {
+    values = {
+        AutoDrive.ROUTE_PRIORITIES.LOWEST.id,
+        AutoDrive.ROUTE_PRIORITIES.LOW.id,
+        AutoDrive.ROUTE_PRIORITIES.NORMAL.id,
+        AutoDrive.ROUTE_PRIORITIES.HIGH.id,
+        AutoDrive.ROUTE_PRIORITIES.HIGHEST.id
+    },
+    texts = {
+        "gui_ad_routePriority_lowest",
+        "gui_ad_routePriority_low",
+        "gui_ad_routePriority_normal",
+        "gui_ad_routePriority_high",
+        "gui_ad_routePriority_highest"
+    },
+    default = AutoDrive.ROUTE_PRIORITIES.NORMAL.id,
+    current = 3,
+    text = "gui_ad_routePriority",
+    tooltip = "gui_ad_routePriority_tooltip",
+    translate = true,
+    isVehicleSpecific = false
+}
+
 AutoDrive.settings.lineHeight = {
     values = {0, 4},
     texts = {"gui_ad_ground", "gui_ad_aboveDriver"},

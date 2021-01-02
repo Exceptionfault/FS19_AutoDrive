@@ -33,7 +33,7 @@ function AutoDrive:dijkstraLiveLongLine(current_in, linked_in, target_id)
 				isLinewithReverse = isLinewithReverse or (isReverseStart or isReverseEnd)
 			end
 
-			distanceToAdd = ADGraphManager:getDistanceBetweenNodes(current, linked)
+			distanceToAdd = ADGraphManager:getWeightedDistanceBetweenNodes(current, linked)
 			if AutoDrive.dijkstraCalc.pre[current] ~= nil and AutoDrive.dijkstraCalc.pre[current] ~= -1 then
 				angle = AutoDrive.angleBetween({x = wp_ahead.x - wp_current.x, z = wp_ahead.z - wp_current.z}, {x = wp_current.x - wp_ref.x, z = wp_current.z - wp_ref.z})
 				angle = math.abs(angle)
@@ -80,7 +80,7 @@ function AutoDrive:dijkstraLiveLongLine(current_in, linked_in, target_id)
 			isLinewithReverse = isLinewithReverse or (isReverseStart or isReverseEnd)
 		end
 
-		distanceToAdd = ADGraphManager:getDistanceBetweenNodes(current, linked)
+		distanceToAdd = ADGraphManager:getWeightedDistanceBetweenNodes(current, linked)
 		if AutoDrive.dijkstraCalc.pre[current] ~= nil and AutoDrive.dijkstraCalc.pre[current] ~= -1 then
 			angle = AutoDrive.angleBetween({x = wp_ahead.x - wp_current.x, z = wp_ahead.z - wp_current.z}, {x = wp_current.x - wp_ref.x, z = wp_current.z - wp_ref.z})
 			angle = math.abs(angle)
@@ -213,7 +213,7 @@ function AutoDrive:dijkstraLive(start, target)
 									isLinewithReverse = isLinewithReverse or (isReverseStart or isReverseEnd)
 								end
 
-								distanceToAdd = ADGraphManager:getDistanceBetweenNodes(shortest_id, linkedNodeId)
+								distanceToAdd = ADGraphManager:getWeightedDistanceBetweenNodes(shortest_id, linkedNodeId)
 								if AutoDrive.dijkstraCalc.pre[shortest_id] ~= nil and AutoDrive.dijkstraCalc.pre[shortest_id] ~= -1 then
 									angle = AutoDrive.angleBetween({x = wp_ahead.x - wp_current.x, z = wp_ahead.z - wp_current.z}, {x = wp_current.x - wp_ref.x, z = wp_current.z - wp_ref.z})
 									angle = math.abs(angle)

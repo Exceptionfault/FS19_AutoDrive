@@ -87,3 +87,12 @@ function AutoDrive.isImplementAllowedForReverseDriving(vehicle,implement)
     return ret
 end
 
+-- Returns the route priority based on it's id
+function AutoDrive:getRoutePriority(priorityId)
+    for _, prio in pairs(AutoDrive.ROUTE_PRIORITIES) do
+        if prio.id ~= nil and prio.id == priorityId then
+            return prio
+        end
+    end
+    return AutoDrive.ROUTE_PRIORITIES.NORMAL
+end

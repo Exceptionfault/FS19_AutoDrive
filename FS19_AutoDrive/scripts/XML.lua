@@ -199,6 +199,12 @@ function AutoDrive.readFromXML(xmlFile)
 		end
 	end
 
+	local prioString = getXMLString(xmlFile, "AutoDrive.waypoints.priority")
+	if prioString == nil or prioString == "" then
+        prioString = getXMLString(xmlFile, "AutoDrive." .. AutoDrive.loadedMap .. ".waypoints.priority")
+    end
+	local prioTable = (prioString or ""):split(",")
+
 	local wp_counter = 0
 	for i, id in pairs(idTable) do
 		if id ~= "" then
@@ -234,6 +240,8 @@ function AutoDrive.readFromXML(xmlFile)
 			wp.x = tonumber(xTable[i])
 			wp.y = tonumber(yTable[i])
 			wp.z = tonumber(zTable[i])
+
+			wp.priority = tonumber(prioTable[i] or AutoDrive.ROUTE_PRIORITIES.NORMAL.id)
 
 			ADGraphManager:setWayPoint(wp)
 		end
@@ -294,11 +302,14 @@ function AutoDrive.saveToXML(xmlFile)
 
 	local incomingTable = {}
 
+	local prioTable =  {}
+
 	for i, p in pairs(ADGraphManager:getWayPoints()) do
 		idFullTable[i] = p.id
 		xTable[i] = string.format("%.3f", p.x)
 		yTable[i] = string.format("%.3f", p.y)
 		zTable[i] = string.format("%.3f", p.z)
+		prioTable[i] = string.format("%d", p.priority or AutoDrive.ROUTE_PRIORITIES.NORMAL.id)
 
 		outTable[i] = table.concat(p.out, ",")
 		if outTable[i] == nil or outTable[i] == "" then
@@ -318,6 +329,7 @@ function AutoDrive.saveToXML(xmlFile)
 		setXMLString(xmlFile, "AutoDrive.waypoints.z", table.concat(zTable, ","))
 		setXMLString(xmlFile, "AutoDrive.waypoints.out", table.concat(outTable, ";"))
 		setXMLString(xmlFile, "AutoDrive.waypoints.incoming", table.concat(incomingTable, ";"))
+		setXMLString(xmlFile, "AutoDrive.waypoints.priority", table.concat(prioTable, ","))
 	end
 
 	local markerIndex = 1		-- used for clean index in saved config xml

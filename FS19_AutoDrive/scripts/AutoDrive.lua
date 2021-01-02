@@ -59,6 +59,27 @@ AutoDrive.EDITOR_SHOW = 4
 AutoDrive.toggleSphrere = true
 AutoDrive.enableSphrere = true
 
+AutoDrive.COLORS = {
+	ROUTE_LINE_LOWEST = {r=0.858, g=0.086, b=0.184},
+	ROUTE_LINE_LOW = {r=0.925, g=0.643, b=0.0},
+	ROUTE_LINE_NORMAL = {r=0, g=1, b=0},
+	ROUTE_LINE_HIGH = {r=0.368, g=0.454, b=0.498},
+	ROUTE_LINE_HIGEST = {r=0.086, g=0.188, b=0.168},
+	ROUTE_LINE_REVERSE = {r=0, g=0.569, b=0.835},
+	ROUTE_LINE_DUALWAY = {r=0, g=0, b=1},
+}
+
+-- Id of the priority, used to store in the config.xml
+-- Color used to draw the line to the waypoint
+-- Weight used to calculate way costs (factor to distance)
+AutoDrive.ROUTE_PRIORITIES = {
+	HIGHEST = {id=1, color=AutoDrive.COLORS.ROUTE_LINE_HIGEST, weight=0.1},
+	HIGH = {id=2, color=AutoDrive.COLORS.ROUTE_LINE_HIGH, weight=0.5},
+	NORMAL = {id=3, color=AutoDrive.COLORS.ROUTE_LINE_NORMAL, weight=1.0},
+	LOW = {id=4, color=AutoDrive.COLORS.ROUTE_LINE_LOW, weight=2.0},
+	LOWEST = {id=5, color=AutoDrive.COLORS.ROUTE_LINE_LOWEST, weight=10.0},
+}
+
 AutoDrive.actions = {
 	{"ADToggleMouse", true, 1},
 	{"ADToggleHud", true, 1},
@@ -246,7 +267,7 @@ function AutoDrive:keyEvent(unicode, sym, modifier, isDown)
         else
             AutoDrive.enableSphrere = AutoDrive.toggleSphrere
         end
-    end
+	end
 end
 
 function AutoDrive:mouseEvent(posX, posY, isDown, isUp, button)

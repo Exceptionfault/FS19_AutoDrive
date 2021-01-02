@@ -218,6 +218,14 @@
 		<text name="gui_ad_debugChannelRoadNetwork"	 			text="Road network" />
 		<text name="gui_ad_debugChannelAll" 					text="Everything" />
 
+		<text name="gui_ad_routePriority"						text="Traffic Priorität" />
+		<text name="gui_ad_routePriority_tooltip"				text="Defines the trafic priority for new routes." />
+		<text name="gui_ad_routePriority_lowest"				text="no traffic" />
+		<text name="gui_ad_routePriority_low"					text="Less traffic" />
+		<text name="gui_ad_routePriority_normal"				text="normal traffic" />
+		<text name="gui_ad_routePriority_high"					text="high traffic" />
+		<text name="gui_ad_routePriority_highest"				text="arterial road" />
+
 		<text name="gui_ad_notificationHistoryTitle" 			text="Notifications" />
 		<text name="button_delete_all" 							text="Delete All" />
 
